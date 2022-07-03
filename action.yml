@@ -1,9 +1,21 @@
 name: 'Set version'
-description: 'Set a unique version based on date, commit hash and build number'
+description: 'Set a unique version and image tag'
+inputs:
+  registry-name:
+    description: 'Container registry name'
+    required: true
+    default: ghcr.io
+  image-name:
+    description: 'Image name'
+    required: true
+    default: ${{ github.repository }}
 outputs:
   version:
     description: "The generated version"
-    value: ${{ steps.setversion.outputs.version }}
+    value: ${{ steps.setoutput.outputs.version }}
+  imageTag:
+    description: "The generated tag"
+    value: ${{ steps.setoutput.outputs.imageTag }}
 runs:
   using: "composite"
   steps:
@@ -14,4 +26,5 @@ runs:
         DATETIME=$(date -u +%Y%m%d%H%M%S)
         VERSION=${DATETIME}_${SHORT_SHA}.${GITHUB_RUN_NUMBER}
         echo "::set-output name=version::${VERSION}"
-      id: setversion
+        echo "::set-output name=imageTag::${inputs.registry-name}/${inputs.image-name}:${VERSION}"
+      id: setoutput
