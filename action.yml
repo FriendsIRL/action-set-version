@@ -26,5 +26,6 @@ runs:
         DATETIME=$(date -u +%Y%m%d%H%M%S)
         VERSION=${DATETIME}_${SHORT_SHA}.${GITHUB_RUN_NUMBER}
         echo "::set-output name=version::${VERSION}"
-        echo "::set-output name=imageTag::${inputs.registry-name}/${inputs.image-name}:${VERSION}"
+        IMAGE_TAG=$(echo "${{ inputs.registry-name }}/${{ inputs.image-name }}:${VERSION}" | tr '[:upper:]' '[:lower:]')
+        echo "::set-output name=imageTag::${IMAGE_TAG}"
       id: setoutput
