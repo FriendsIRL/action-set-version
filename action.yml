@@ -1,0 +1,17 @@
+name: 'Set version'
+description: 'Set a unique version based on date, commit hash and build number'
+outputs:
+  version:
+    description: "The generated version"
+    value: ${{ steps.setversion.outputs.version }}
+runs:
+  using: "composite"
+  steps:
+    - name: Set a version
+      shell: bash
+      run: |
+        SHORT_SHA=$(echo ${{ github.sha }} | head -c 8)
+        DATETIME=$(date -u +%Y%m%d%H%M%S)
+        VERSION=${DATETIME}_${SHORT_SHA}.${GITHUB_RUN_NUMBER}
+        echo "::set-output name=version::${VERSION}"
+      id: setversion
