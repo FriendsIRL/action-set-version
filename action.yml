@@ -12,14 +12,15 @@ inputs:
 outputs:
   version:
     description: "The generated version"
-    value: ${{ steps.setoutput.outputs.version }}
+    value: ${{ steps.setOutput.outputs.version }}
   image-tag:
     description: "The generated tag"
-    value: ${{ steps.setoutput.outputs.image-tag }}
+    value: ${{ steps.setOutput.outputs.image-tag }}
 runs:
   using: "composite"
   steps:
     - name: Set a version
+      id: setOutput
       shell: bash
       run: |
         SHORT_SHA=$(echo ${{ github.sha }} | head -c 8)
